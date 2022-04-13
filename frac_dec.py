@@ -1,26 +1,53 @@
 #Oliver Hugh 4/4/2022
+import math
 
-def repeating_nums(repeating_seq, static_num, jump=1):
+
+def repeating_nums(repeating_seq, static_num):
     """
     Used if repeating numbers are found in a fraction. Returns
     a tuple of the numerator, denominator of what the unsimplified fraction is
     Example if we have .43333
     :param repeating_seq: the part that repeats in the fraction ex: .03
     :param static_num: .4
-    :param jump: the number of digits in the repeating sequence ex: 1
-    :return:
+    :return: numerator, denominator  (Both ints)
     """
     if repeating_seq != 0:
+        """
+        #The following code works for most decimals, but after some experimentation, I learned it doesn't work
+        #for all repeating decimals. For example .415 repeating. It will run an infinite loop because 1 - .001 will not
+        #exactly equal .999. This is left in to show my process for this, which took a long time to figure out. Below 
+        this comment is the actual code, which works by converting numbers to strings and back so that we can ensure
+        the values are exact, like a and 1-r in the geometric series summation formula
+        
         #assume it repeats forever and say it is a geometric series
         #sum = a/(1-r)
         r = .1 ** jump
         a = repeating_seq
         repeating_numerator = a
-        repeating_denominator = 1 - r
-        #Make it so there are no decimal points in either the numerator or denominator
-        while repeating_denominator % 10 or repeating_numerator % 10:
-            repeating_denominator *= 10
-            repeating_numerator *= 10
+        #the line below is the logic, but we will assign it in a different way due to how python handles floats (it
+        #needs to be 1 - r exactly)
+        #repeating_denominator = 1 - r"""
+        repeating_numerator = str(repeating_seq)
+        print(repeating_numerator)
+        #get all numbers to the right of the decimal place
+        repeating_numerator = repeating_numerator.split(".")[1]
+        print(repeating_numerator)
+        if "0" in repeating_numerator:
+            jump = len(repeating_numerator.split("0")[1])
+            extra = len(repeating_numerator) - jump
+        else:
+            jump = len(repeating_numerator)
+            extra = 0
+        repeating_numerator = int(repeating_numerator)
+        repeating_denominator = ""
+        for k in range(jump):
+            repeating_denominator += "9"
+        for l in range(extra):
+            repeating_denominator += "0"
+        print(repeating_numerator)
+        print(repeating_denominator)
+        repeating_denominator = int(repeating_denominator)
+
         #convert the static portion to a fraction with the same denominator
         static_num_numerator = static_num * repeating_denominator
         #make sure it is a whole number
@@ -55,19 +82,15 @@ def simplify(numerator: int, denominator: int):
         continue_checking = False
         #iterate from 2 to 1/2 of the smaller number
         counter = 0
+        if numerator % denominator == 0:
+            numerator /= denominator
+            denominator /= denominator
+            continue_checking = False
+        elif denominator % numerator == 0:
+            denominator /= numerator
+            numerator /= numerator
+            continue_checking = False
         for i in range(2, int(smaller_num//2)+1):
-            #if first iteration, check if
-            if i == 2:
-                if numerator % denominator == 0:
-                    numerator /= denominator
-                    denominator /= denominator
-                    continue_checking = False
-                    break
-                elif denominator % numerator == 0:
-                    denominator /= numerator
-                    numerator /= numerator
-                    continue_checking = False
-                    break
             if numerator % i == 0 and denominator % i == 0:
                 numerator /= i
                 denominator /= i

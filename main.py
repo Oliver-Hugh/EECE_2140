@@ -113,8 +113,8 @@ decfrac_frame.grid(row=1, column=2, padx=5, pady=5)
 frac_to_dec_frame = LabelFrame(decfrac_frame, text="Fraction to Decimal", bg='#e09758')
 frac_to_dec_frame.grid(row=0, column=0)
 frac_dec_instruction = Label(frac_to_dec_frame, text="Please insert the fraction as numerator/denominator  Ex: 1/2",
-                             padx=5, pady=5, bg='#e09758')
-frac_dec_instruction.pack()
+                             padx=5, pady=10, bg='#e09758')
+frac_dec_instruction.pack(padx=10)
 frac_dec_entry = Entry(frac_to_dec_frame, width=15)
 frac_dec_entry.pack(pady=5)
 
@@ -141,15 +141,15 @@ frac_dec_compute.pack(pady=5)
 frac_dec_result = Entry(frac_to_dec_frame, width=10)
 frac_dec_result.pack(pady=5)
 
-dec_frac_instruction_text = "Insert any non-repeating parts of the number as a decimal in the box on the left\n " \
-                            "(Ex: .1 or 0.1) and enter any repeating parts of the number "\
-                            "in the box on the right \n(Ex: .1666 " \
-                            "would have .1 on the left and .06 on the right."
+dec_frac_instruction_text = "Insert any non-repeating parts of the number as a decimal\n in the LEFT box " \
+                            "and enter any repeating parts "\
+                            "in the RIGHT\n box (Ex: .1666 " \
+                            "would have .1 on the left and .06 on the right)."
 #decimal to fraction
 dec_to_frac_frame = LabelFrame(decfrac_frame, text="Decimal to Fraction", bg='#e09758')
 dec_to_frac_frame.grid(row=1, column=0, pady=5)
 dec_to_frac_instruction = Label(dec_to_frac_frame, text=dec_frac_instruction_text,
-                                bg='#e09758')
+                                bg='#e09758', padx=5)
 dec_to_frac_instruction.grid(row=0, column=0, columnspan=3, pady=5)
 df_static_label = Label(dec_to_frac_frame, text="Non-Repeating Decimal:")
 df_static_label.grid(row=1, column=0)
@@ -169,22 +169,14 @@ def place_dec_frac():
     """
     jump = 0
     try:
-        repeat_decimal = str(df_repeat_entry.get())
-        for i in range(len(repeat_decimal)):
-            if repeat_decimal[i] == ".":
-                i += 1
-                while repeat_decimal[i] == '0':
-                    i += 1
-                jump = len(repeat_decimal[i:])
-                break
-        repeat_decimal = float(repeat_decimal)
+        repeat_decimal = float(df_repeat_entry.get())
     except ValueError:
         repeat_decimal = 0
     try:
         static_decimal = float(df_static_entry.get())
     except ValueError:
         static_decimal = 0
-    numerator, denominator = frac_dec.repeating_nums(repeat_decimal, static_decimal, jump)
+    numerator, denominator = frac_dec.repeating_nums(repeat_decimal, static_decimal)
     numerator, denominator = frac_dec.simplify(int(numerator), int(denominator))
     string_fraction = str(numerator) + "/" + str(denominator)
     df_result.delete(0, END)

@@ -1,16 +1,23 @@
 #Oliver Hugh 4/4/2022
 
-"""
-pseudocode for decimal to fraction:
+def normal_dec_to_frac(decimal: float):
+    """
+    This function converts decimals to fractions, using the other functions in this file to do so
+    :param decimal: the decimal to convert
+    :return: a tuple of the numerator, denominator (both ints)
+    """
+    counter = 0
+    #convert the decimal to a whole number
+    while decimal % 10:
+        decimal *= 10
+        #update the counter so we can create an appropriate denominator
+        counter += 1
+    numerator = decimal
+    denominator = 10 ** counter
+    return simplify(numerator, denominator)
 
-make it over a multiple of 10
-iterate from 2 to 1/2 of the smaller number
-once you reach a common product and divide both by it
-if you've gone thru all of the numbers and there are none, then the fraction is simplified
-"""
 
-
-def repeating_nums(repeating_seq, static_num, jump=.1):
+def repeating_nums(repeating_seq, static_num, jump=1):
     """
     Used if repeating numbers are found in a fraction. Returns
     a tuple of the numerator, denominator of what the unsimplified fraction is
@@ -20,21 +27,34 @@ def repeating_nums(repeating_seq, static_num, jump=.1):
     :param jump: the number of digits in the repeating sequence ex: 1
     :return:
     """
-    #assume it repeats forever and say it is a geometric series
-    #sum = a/(1-r)
-    r = jump
-    a = repeating_seq
-    repeating_numerator = a
-    repeating_denominator = 1 - r  # Will always be .9
-    #Make it so there are no decimal points in either the numerator or denominator
-    while repeating_denominator % 10 or repeating_numerator % 10:
-        repeating_denominator *= 10
-        repeating_numerator *= 10
-    #convert the static portion to a fraction with the same denominator
-    static_num_numerator = static_num * repeating_denominator
-    static_num_denominator = 1 * repeating_denominator
-    new_numerator = static_num_numerator + repeating_numerator
-    return new_numerator, static_num_denominator
+    if repeating_seq != 0:
+        #assume it repeats forever and say it is a geometric series
+        #sum = a/(1-r)
+        r = .1 ** jump
+        a = repeating_seq
+        repeating_numerator = a
+        repeating_denominator = 1 - r
+        #Make it so there are no decimal points in either the numerator or denominator
+        while repeating_denominator % 10 or repeating_numerator % 10:
+            repeating_denominator *= 10
+            repeating_numerator *= 10
+        #convert the static portion to a fraction with the same denominator
+        static_num_numerator = static_num * repeating_denominator
+        #make sure it is a whole number
+        while static_num_numerator % 10:
+            static_num_numerator *= 10
+            #We also must make sure we update the repeating number so they have the same denominator
+            repeating_numerator *= 10
+            repeating_denominator *= 10
+        new_numerator = static_num_numerator + repeating_numerator
+        return int(new_numerator), int(repeating_denominator)
+    else:
+        denominator = 1
+        while static_num % 10:
+            static_num *= 10
+            denominator *= 10
+            return int(static_num), int(denominator)
+
 
 
 def simplify(numerator, denominator):
@@ -50,12 +70,33 @@ def simplify(numerator, denominator):
     continue_checking = True
     while continue_checking:
         continue_checking = False
-        for i in range(1, smaller_num//2+1):
+        #iterate from 2 to 1/2 of the smaller number
+        for i in range(2, smaller_num//2+1):
+            #if first iteration, check if
+            if i == 1:
+                if numerator % denominator == 0:
+                    numerator /= denominator
+                    denominator /= denominator
+                    continue_checking = True
+                    break
+                elif denominator % numerator == 0:
+                    denominator /= numerator
+                    numerator /= numerator
+                    continue_checking = True
+                    break
             if numerator % i == 0 and denominator % 10 == 0:
                 numerator /= i
                 denominator /= i
                 continue_checking = True
                 break
+
     return numerator, denominator
 
 
+def frac_to_dec(numerator: int, denominator: int):
+    """
+    This function simply converts fractions to decimals
+    :return: decimal equivalent of fraction
+    """
+    decimal = numerator / denominator
+    return float("{:.5f}".format(decimal))

@@ -1,4 +1,6 @@
 from tkinter import *
+
+import frac_dec
 import units
 import gears
 from reference import Table as rTable
@@ -9,15 +11,15 @@ root = Tk()
 root.title("Designer's Reference")
 #root.geometry('1400x400')
 
+#Instruction Frame
 instruction_frame = LabelFrame(master=root, text="Instructions", bg='#c9ad20')
 instruction_frame.grid(row=0, column=0, padx=5, pady=5, columnspan=4)
-
 instruction_text = """Hello! This is an application meant as a quick reference to designers working with CAD. 
 This is my final project for EECE 2140: Computing Fundamentals. Simply select between the 
 different options for each individual calculator/convertor and input data for results! -Oliver Hugh"""
-
 instruction_label = Label(master=instruction_frame, text=instruction_text, bg='#c9ad20', width=90)
 instruction_label.grid(row=0, column=0)
+
 
 #The Gear Calculator Frame
 gear_frame = LabelFrame(master=root, text="Gear Calculator", bg='#c98a00')
@@ -72,14 +74,12 @@ def gear_calculation(gear_dp):
 
 #button to calculate. This is created after the entry (even though it is above it) because its command
 #function references the gear_result entry
-gear_button = Button(gear_frame, width=15, text="Calculate Result", command=lambda: gear_calculation(dp.get()), bg='#f7e6d0')
+gear_button = Button(gear_frame, width=15, text="Calculate Result", command=lambda: gear_calculation(dp.get()),
+                     bg='#f7e6d0')
 gear_button.grid(row=4, column=0)
 
 
-#function for calculating the center to center distance of the gears
-
-
-#The unit Calculator Frame
+#The Unit Calculator Frame
 unit_frame = LabelFrame(master=root, text="Unit Convertor", bg='#7a6d17')
 unit_frame.grid(row=1, column=1, padx=5, pady=5)
 
@@ -106,10 +106,102 @@ unit_label.pack()
 
 
 #The Decimal/Fraction Convertor
-dec_frac_frame = LabelFrame(root, text="Decimal/Fraction Convertor", bg='#e09758')
-dec_frac_frame.grid(row=1, column=2, padx=5, pady=5)
-dec_frac_label = Label(dec_frac_frame, text="FRACTIONSSS", bg='#e09758', width=20, height=20)
-dec_frac_label.pack()
+decfrac_frame = LabelFrame(root, text="Decimal/Fraction Convertor", bg='#e09758')
+decfrac_frame.grid(row=1, column=2, padx=5, pady=5)
+
+#fraction to decimal
+frac_to_dec_frame = LabelFrame(decfrac_frame, text="Fraction to Decimal", bg='#e09758')
+frac_to_dec_frame.grid(row=0, column=0)
+frac_dec_instruction = Label(frac_to_dec_frame, text="Please insert the fraction as numerator/denominator  Ex: 1/2",
+                             padx=5, pady=5, bg='#e09758')
+frac_dec_instruction.pack()
+frac_dec_entry = Entry(frac_to_dec_frame, width=15)
+frac_dec_entry.pack(pady=5)
+
+
+def place_frac_to_dec():
+    """
+    find and pass numerator and denominator to functions in the frac_dec file to then insert into the result entry box
+    :return: None
+    """
+    fraction = str(frac_dec_entry.get())
+    if "/" in fraction:
+        fraction_lst = fraction.split("/")
+        numerator = int(fraction_lst[0])
+        denominator = int(fraction_lst[1])
+        decimal = frac_dec.frac_to_dec(numerator, denominator)
+        frac_dec_result.delete(0, END)
+        frac_dec_result.insert(END, decimal)
+
+
+frac_dec_result_label = Label(frac_to_dec_frame, text="The decimal value of this fraction is: ", bg="#c79554")
+frac_dec_result_label.pack(pady=5)
+frac_dec_compute = Button(frac_to_dec_frame, text="Compute", bg="#c79554", command=place_frac_to_dec)
+frac_dec_compute.pack(pady=5)
+frac_dec_result = Entry(frac_to_dec_frame, width=10)
+frac_dec_result.pack(pady=5)
+
+dec_frac_instruction_text = "Insert any non-repeating parts of the number as a decimal in the box on the left\n " \
+                            "(Ex: .1 or 0.1) and enter any repeating parts of the number "\
+                            "in the box on the right \n(Ex: .1666 " \
+                            "would have .1 on the left and .06 on the right."
+#decimal to fraction
+dec_to_frac_frame = LabelFrame(decfrac_frame, text="Decimal to Fraction", bg='#e09758')
+dec_to_frac_frame.grid(row=1, column=0, pady=5)
+dec_to_frac_instruction = Label(dec_to_frac_frame, text=dec_frac_instruction_text,
+                                bg='#e09758')
+dec_to_frac_instruction.grid(row=0, column=0, columnspan=3, pady=5)
+df_static_label = Label(dec_to_frac_frame, text="Non-Repeating Decimal:")
+df_static_label.grid(row=1, column=0)
+df_static_entry = Entry(dec_to_frac_frame, width=10)
+df_static_entry.grid(row=2, column=0, padx=5, pady=5)
+
+df_repeat_label = Label(dec_to_frac_frame, text="Repeating Decimal:")
+df_repeat_label.grid(row=1, column=1)
+df_repeat_entry = Entry(dec_to_frac_frame, width=10)
+df_repeat_entry.grid(row=2, column=1, padx=5, pady=5)
+
+
+def place_dec_frac():
+    """
+    find fraction equivalent of the decimal and put it in the correct result box based on the functions in frac_dec file
+    :return: None
+    """
+    jump = 0
+    try:
+        repeat_decimal = str(df_repeat_entry.get())
+        for i in range(len(repeat_decimal)):
+            if repeat_decimal[i] == ".":
+                i += 1
+                while repeat_decimal[i] == '0':
+                    i += 1
+                jump = len(repeat_decimal[i:])
+                break
+        repeat_decimal = float(repeat_decimal)
+    except ValueError:
+        repeat_decimal = 0
+    try:
+        static_decimal = float(df_static_entry.get())
+    except ValueError:
+        static_decimal = 0
+    numerator, denominator = frac_dec.repeating_nums(repeat_decimal, static_decimal, jump)
+    numerator, denominator = frac_dec.simplify(numerator, denominator)
+    string_fraction = str(numerator) + "/" + str(denominator)
+    df_result.delete(0, END)
+    df_result.insert(END, string_fraction)
+
+
+df_compute_Button = Button(dec_to_frac_frame, width=10, text="Compute", command=place_dec_frac)
+df_compute_Button.grid(row=3, column=0, columnspan=2, pady=5)
+df_result_label = Label(dec_to_frac_frame, text="The resulting fraction is: ", width=18)
+df_result_label.grid(row=4, column=0, columnspan=2, pady=5)
+df_result = Entry(dec_to_frac_frame, width=18)
+df_result.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
+
+
+
+
+
 
 #Hardware reference frame
 hardware_ref_frame = LabelFrame(root, text="Hardware Reference", bg='#b8341a')

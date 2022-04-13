@@ -47,10 +47,33 @@ dp.set(dp_list[0])
 #include a blank label to increase the size of the frame
 spacer_label = Label(dp_frame, width=15, bg='#f7e6d0')
 spacer_label.pack()
+gear_result_frame = LabelFrame(gear_frame, text="Center to Center distance:", bg='#f7e6d0')
+gear_result_frame.grid(row=5, column=0, pady=5)
+gear_result = Entry(gear_result_frame, width=15, bg='#f7e6d0')
+gear_result.pack()
 
 
-#button to calculate
-#display result
+def gear_calculation(gear_dp):
+    """
+    This function calculates the center to center distance of 2 gears using functions from the
+    gears file and inserts the result inside the gear_result entry
+    :param gear_dp: the diametral pitch of the gears
+    :return: None
+    """
+    teeth_1 = int(gear_1_entry.get())
+    teeth_2 = int(gear_2_entry.get())
+
+    if type(teeth_1) is int and type(teeth_2) is int and teeth_1 is not None and teeth_2 is not None:
+        #now use functions from the gears file to calculate the center to center distance
+        gear_answer = gears.calculate_center(teeth_1, teeth_2, gear_dp)
+        gear_result.delete(0, END)
+        gear_result.insert(END, str(gear_answer) + " in")
+
+
+#button to calculate. This is created after the entry (even though it is above it) because its command
+#function references the gear_result entry
+gear_button = Button(gear_frame, width=15, text="Calculate Result", command=lambda: gear_calculation(dp.get()), bg='#f7e6d0')
+gear_button.grid(row=4, column=0)
 
 
 #function for calculating the center to center distance of the gears

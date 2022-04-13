@@ -11,8 +11,8 @@ def calculate_center(gear_1_teeth: int, gear_2_teeth: int, dp):
     """
     pitch_diameter_1 = calculate_pitch_diameter(gear_1_teeth, dp)
     pitch_diameter_2 = calculate_pitch_diameter(gear_2_teeth, dp)
-    center_to_center = (pitch_diameter_2 + pitch_diameter_2)/2
-    return float("{:.2f}".format(center_to_center))
+    center_to_center = (pitch_diameter_2 + pitch_diameter_1)/2
+    return float("{:.3f}".format(center_to_center))
 
 
 def calculate_pitch_diameter(num_teeth: int, diametric_pitch):

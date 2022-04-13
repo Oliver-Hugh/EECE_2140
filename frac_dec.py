@@ -1,22 +1,5 @@
 #Oliver Hugh 4/4/2022
 
-def normal_dec_to_frac(decimal: float):
-    """
-    This function converts decimals to fractions, using the other functions in this file to do so
-    :param decimal: the decimal to convert
-    :return: a tuple of the numerator, denominator (both ints)
-    """
-    counter = 0
-    #convert the decimal to a whole number
-    while decimal % 10:
-        decimal *= 10
-        #update the counter so we can create an appropriate denominator
-        counter += 1
-    numerator = decimal
-    denominator = 10 ** counter
-    return simplify(numerator, denominator)
-
-
 def repeating_nums(repeating_seq, static_num, jump=1):
     """
     Used if repeating numbers are found in a fraction. Returns
@@ -47,17 +30,17 @@ def repeating_nums(repeating_seq, static_num, jump=1):
             repeating_numerator *= 10
             repeating_denominator *= 10
         new_numerator = static_num_numerator + repeating_numerator
+        print(new_numerator, repeating_denominator)
         return int(new_numerator), int(repeating_denominator)
     else:
         denominator = 1
         while static_num % 10:
             static_num *= 10
             denominator *= 10
-            return int(static_num), int(denominator)
+        return int(static_num), int(denominator)
 
 
-
-def simplify(numerator, denominator):
+def simplify(numerator: int, denominator: int):
     """
     Tries to simplify a fraction given its numerator and denominator
     :param numerator: Numerator of fraction. Should be an int
@@ -71,26 +54,27 @@ def simplify(numerator, denominator):
     while continue_checking:
         continue_checking = False
         #iterate from 2 to 1/2 of the smaller number
-        for i in range(2, smaller_num//2+1):
+        counter = 0
+        for i in range(2, int(smaller_num//2)+1):
             #if first iteration, check if
-            if i == 1:
+            if i == 2:
                 if numerator % denominator == 0:
                     numerator /= denominator
                     denominator /= denominator
-                    continue_checking = True
+                    continue_checking = False
                     break
                 elif denominator % numerator == 0:
                     denominator /= numerator
                     numerator /= numerator
-                    continue_checking = True
+                    continue_checking = False
                     break
-            if numerator % i == 0 and denominator % 10 == 0:
+            if numerator % i == 0 and denominator % i == 0:
                 numerator /= i
                 denominator /= i
                 continue_checking = True
+                smaller_num = numerator if numerator < denominator else denominator
                 break
-
-    return numerator, denominator
+    return int(numerator), int(denominator)
 
 
 def frac_to_dec(numerator: int, denominator: int):

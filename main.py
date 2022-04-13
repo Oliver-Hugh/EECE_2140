@@ -185,7 +185,7 @@ def place_dec_frac():
     except ValueError:
         static_decimal = 0
     numerator, denominator = frac_dec.repeating_nums(repeat_decimal, static_decimal, jump)
-    numerator, denominator = frac_dec.simplify(numerator, denominator)
+    numerator, denominator = frac_dec.simplify(int(numerator), int(denominator))
     string_fraction = str(numerator) + "/" + str(denominator)
     df_result.delete(0, END)
     df_result.insert(END, string_fraction)
@@ -197,10 +197,6 @@ df_result_label = Label(dec_to_frac_frame, text="The resulting fraction is: ", w
 df_result_label.grid(row=4, column=0, columnspan=2, pady=5)
 df_result = Entry(dec_to_frac_frame, width=18)
 df_result.grid(row=5, column=0, columnspan=2, padx=5, pady=5)
-
-
-
-
 
 
 #Hardware reference frame

@@ -156,3 +156,19 @@ def prefix_conversion(original_unit, new_unit, original_value):
         raise Exception("Unknown time units used")
     new_value = (original_value / prefix_constants[original_unit_index]) * prefix_constants[new_unit_index]
     return new_value
+
+
+def get_unit_list(type_to_convert):
+    t = type_to_convert
+    if t == "Time":
+        return ['sec', 'min', 'hours', 'days']
+    elif t == 'Distance':
+        return ['inch', 'feet', 'yards', 'mile', 'mm', 'cm', 'm', 'km']
+    elif t == 'Weight/Mass':
+        return ['oz', 'lb', 'ton', 'kg']
+    elif t == 'Angle':
+        return ['degrees', 'radians']
+    elif t == 'Metric Prefixes':
+        return ['nano', 'micro', 'milli', 'centi', 'base', 'kilo', 'mega', 'giga']
+    else:
+        raise ValueError("Improper input passed to function")

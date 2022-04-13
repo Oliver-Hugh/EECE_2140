@@ -83,18 +83,33 @@ gear_button.grid(row=4, column=0)
 unit_frame = LabelFrame(master=root, text="Unit Convertor", bg='#7a6d17')
 unit_frame.grid(row=1, column=1, padx=5, pady=5)
 
-#Drop Down menu for the calculator frame
+#Drop Down menu for unit type
+type_frame = LabelFrame(unit_frame, text="Conversion Type", bg='#7a6d17')
+type_frame.grid(row=0, column=0, padx=5, pady=5)
 conversion_options = ['Time', 'Distance', 'Weight/Mass', 'Angle', 'Metric Prefixes']
 #The type of conversion which will be decided by the user clicking
 conversion_type = StringVar()
 #But we will set it to first in list as default
 conversion_type.set(conversion_options[0])
-conversion_type_drop = OptionMenu(unit_frame, conversion_type, *conversion_options)
-conversion_type_drop.pack()
-unit_label = Label(unit_frame, text="UNITSSS", bg='#7a6d17', width=20, height=20)
-unit_label.pack()
+conversion_type_drop = OptionMenu(type_frame, conversion_type, *conversion_options)
+conversion_type_drop.pack(padx=5, pady=5)
 
-#Drop-down of unit to convert FROM
+#Value to convert items
+convert_frame = LabelFrame(unit_frame, text="Unit to Convert")
+convert_frame.grid(row=1, column=0, pady=5, padx=5)
+convert_value_instruction = Label(convert_frame, text="Value to be Converted:", padx=5, pady=2)
+convert_value_instruction.pack()
+convert_value_entry = Entry(convert_frame, width=10)
+convert_value_entry.pack()
+#Drop-down of unit to convert from
+convert_unit_instruction = Label(convert_frame, text="Original Unit:", padx=5, pady=2)
+convert_unit_instruction.pack()
+conversion_unit = StringVar()
+#use the get_unit_list from the "units" module to properly set the available unit options based on the conversion type
+conversion_unit_lst = units.get_unit_list(conversion_type.get())
+convert_units = OptionMenu(convert_frame, conversion_unit, *conversion_unit_lst)
+convert_units.pack()
+conversion_unit.set(units.get_unit_list(conversion_type.get())[0])
 
 #Drop-down of unit to convert TO
 

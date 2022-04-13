@@ -22,14 +22,38 @@ instruction_label.grid(row=0, column=0)
 #The Gear Calculator Frame
 gear_frame = LabelFrame(master=root, text="Gear Calculator", bg='#c98a00')
 gear_frame.grid(row=1, column=0, padx=5, pady=5)
-gear_label = Label(gear_frame, text="GEARSSSSS", bg='#c98a00', width=20, height=20,)
-gear_label.pack()
+gear_instructions = Label(gear_frame, text="Enter all information below \nto calculate center distance.", bg='#c98a00')
+gear_instructions.grid(column=0, row=0, padx=5)
 
 #entry for num teeth in gear 1
+gear_1_frame = LabelFrame(gear_frame, text="Gear 1 # of Teeth:", bg='#c98a00')
+gear_1_frame.grid(column=0, row=1, pady=5, padx=2)
+gear_1_entry = Entry(gear_1_frame, width=15, bg='#f7e6d0')
+gear_1_entry.pack()
 #entry for num teeth in gear 2
-#entry or drop-down for dp
+gear_2_frame = LabelFrame(gear_frame, text="Gear 2 # of Teeth:", bg='#c98a00')
+gear_2_frame.grid(column=0, row=2, pady=5, padx=2)
+gear_2_entry = Entry(gear_2_frame, width=15, bg='#f7e6d0')
+gear_2_entry.pack()
+#Drop-down for dp
+dp_frame = LabelFrame(gear_frame, text="Diametral Pitch", bg='#f7e6d0')
+dp_frame.grid(column=0, row=3, pady=5, padx=2)
+#list of standard diametral pitches
+dp_list = [12, 16, 18, 20, 24, 32, 48]
+dp = IntVar()
+dp_drop = OptionMenu(dp_frame, dp, *dp_list)
+dp_drop.pack()
+dp.set(dp_list[0])
+#include a blank label to increase the size of the frame
+spacer_label = Label(dp_frame, width=15, bg='#f7e6d0')
+spacer_label.pack()
+
+
 #button to calculate
 #display result
+
+
+#function for calculating the center to center distance of the gears
 
 
 #The unit Calculator Frame
@@ -67,9 +91,6 @@ dec_frac_label.pack()
 #Hardware reference frame
 hardware_ref_frame = LabelFrame(root, text="Hardware Reference", bg='#b8341a')
 hardware_ref_frame.grid(row=1, column=3, padx=5, pady=5)
-#title inside the main frame
-#hardware_ref_label = Label(hardware_ref_frame, text="HARDWARE", bg='#b8341a')
-#hardware_ref_label.grid(column=0, row=0)
 
 
 def hardware_select():

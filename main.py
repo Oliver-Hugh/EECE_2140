@@ -181,21 +181,21 @@ def compute_units():
 
 #button to press to make the conversion
 compute_unit_button = Button(unit_frame, text="Compute", command=compute_units)
-compute_unit_button.grid(column=0, row=3, pady=5)
+compute_unit_button.grid(column=0, row=3, pady=4)
 
 
 #The Decimal/Fraction Convertor
 decfrac_frame = LabelFrame(root, text="Decimal/Fraction Convertor", bg='#e09758')
-decfrac_frame.grid(row=1, column=2, padx=5, pady=5)
+decfrac_frame.grid(row=1, column=2, padx=5, pady=4)
 
 #fraction to decimal
 frac_to_dec_frame = LabelFrame(decfrac_frame, text="Fraction to Decimal", bg='#e09758')
 frac_to_dec_frame.grid(row=0, column=0)
 frac_dec_instruction = Label(frac_to_dec_frame, text="Please insert the fraction as numerator/denominator  Ex: 1/2",
-                             padx=5, pady=10, bg='#e09758')
+                             padx=5, pady=5, bg='#e09758')
 frac_dec_instruction.pack(padx=10)
 frac_dec_entry = Entry(frac_to_dec_frame, width=15)
-frac_dec_entry.pack(pady=5)
+frac_dec_entry.pack(pady=4)
 
 
 def place_frac_to_dec():
@@ -214,11 +214,11 @@ def place_frac_to_dec():
 
 
 frac_dec_result_label = Label(frac_to_dec_frame, text="The decimal value of this fraction is: ", bg="#c79554")
-frac_dec_result_label.pack(pady=5)
+frac_dec_result_label.pack(pady=4)
 frac_dec_compute = Button(frac_to_dec_frame, text="Compute", bg="#c79554", command=place_frac_to_dec)
-frac_dec_compute.pack(pady=5)
+frac_dec_compute.pack(pady=4)
 frac_dec_result = Entry(frac_to_dec_frame, width=10)
-frac_dec_result.pack(pady=5)
+frac_dec_result.pack(pady=4)
 
 dec_frac_instruction_text = "Insert any non-repeating parts of the number as a decimal\n in the LEFT box " \
                             "and enter any repeating parts "\
@@ -226,19 +226,19 @@ dec_frac_instruction_text = "Insert any non-repeating parts of the number as a d
                             "would have .1 on the left and .06 on the right)."
 #decimal to fraction
 dec_to_frac_frame = LabelFrame(decfrac_frame, text="Decimal to Fraction", bg='#e09758')
-dec_to_frac_frame.grid(row=1, column=0, pady=5)
+dec_to_frac_frame.grid(row=1, column=0, pady=4)
 dec_to_frac_instruction = Label(dec_to_frac_frame, text=dec_frac_instruction_text,
                                 bg='#e09758', padx=5)
-dec_to_frac_instruction.grid(row=0, column=0, columnspan=3, pady=5)
+dec_to_frac_instruction.grid(row=0, column=0, columnspan=3, pady=4)
 df_static_label = Label(dec_to_frac_frame, text="Non-Repeating Decimal:")
 df_static_label.grid(row=1, column=0)
 df_static_entry = Entry(dec_to_frac_frame, width=10)
-df_static_entry.grid(row=2, column=0, padx=5, pady=5)
+df_static_entry.grid(row=2, column=0, padx=5, pady=4)
 
 df_repeat_label = Label(dec_to_frac_frame, text="Repeating Decimal:")
 df_repeat_label.grid(row=1, column=1)
 df_repeat_entry = Entry(dec_to_frac_frame, width=10)
-df_repeat_entry.grid(row=2, column=1, padx=5, pady=5)
+df_repeat_entry.grid(row=2, column=1, padx=5, pady=4)
 
 
 def place_dec_frac():
@@ -318,7 +318,7 @@ def hardware_select():
 
 #picking the size (metric vs standard)
 hardware_sys_frame = LabelFrame(hardware_ref_frame, text="System")
-hardware_sys_frame.grid(column=0, row=0, pady=15)
+hardware_sys_frame.grid(column=0, row=0, pady=20)
 #radio buttons to pick between metric and standard
 var_1 = StringVar()  # For the system
 var_2 = StringVar()  # For the type
@@ -331,7 +331,7 @@ metric_hardware.pack(side=LEFT)
 
 #picking the type of hardware
 hardware_type_frame = LabelFrame(hardware_ref_frame, text="Type")
-hardware_type_frame.grid(column=1, row=0, pady=15)
+hardware_type_frame.grid(column=1, row=0, pady=20)
 #radio buttons to pick between nuts and machine screws
 screws = Radiobutton(hardware_type_frame, text="Screws", variable=var_2, value="sc", command=hardware_select)
 screws.pack(side=LEFT)
@@ -342,9 +342,9 @@ nuts.pack(side=LEFT)
 
 #hardware works cited
 works_cited_frame = LabelFrame(hardware_ref_frame, text="My References")
-works_cited_frame.grid(row=10, column=0, columnspan=3, pady=5)
+works_cited_frame.grid(row=10, column=0, columnspan=3, pady=20)
 works_cited_button = Button(works_cited_frame, text="Click for Works Cited", command=lambda:
                             works_cited(works_cited_frame), width=30, bg="#a89a6a")
-works_cited_button.pack()
+works_cited_button.pack(pady=10)
 
 root.mainloop()

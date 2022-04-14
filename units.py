@@ -156,7 +156,7 @@ def prefix_conversion(original_unit, new_unit, original_value):
             new_unit_index = i
     if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown time units used")
-    new_value = (original_value / 10**prefix_constants[original_unit_index]) * 10**prefix_constants[new_unit_index]
+    new_value = (original_value / (10**prefix_constants[new_unit_index])) * (10**prefix_constants[original_unit_index])
     return new_value
 
 

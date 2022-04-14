@@ -1,6 +1,27 @@
 #Oliver Hugh 4/1/2022
 import math
 
+# list of equivalent values for [seconds, minutes, hours, days]
+time_constants = [3600, 60, 1, 1 / 24]
+# list of their corresponding unit names
+time_units = ['sec', 'min', 'hours', 'days']
+# list of equivalent values for [inch, feet, yards, mile, mm, cm, m, km]
+distance_constants = [39.37, 3.28, 1.09, .00062137, 1000, 100, 1, .001]
+# list of their corresponding unit names
+distance_units = ['inch', 'feet', 'yards', 'mile', 'mm', 'cm', 'm', 'km']
+# list of orders of magnitude for [nano, micro, milli, centi, base, kilo, mega, giga]
+prefix_constants = [-9, -6, -3, -2, 0, 3, 6, 9]
+# list of their corresponding unit names
+prefix_units = ['nano', 'micro', 'milli', 'centi', 'base', 'kilo', 'mega', 'giga']
+# list of equivalent values for [radians, degrees]
+angle_constants = [360, 2 * math.pi]
+# list of their corresponding unit names
+angle_units = ['degrees', 'radians']
+# list of equivalent values for [oz, lb, ton, kg, g]
+w_m_constants = [16, 1, .0005, .4536, 453.6]
+# list of their corresponding unit names
+w_m_units = ['oz', 'lb', 'ton', 'kg']
+
 
 def conversion(type_to_convert, orig_unit, converted_unit, value_to_convert):
     """
@@ -13,19 +34,20 @@ def conversion(type_to_convert, orig_unit, converted_unit, value_to_convert):
     """
     #make variable names easier to use
     t = type_to_convert
-    if t == "time":
+    if t == "Time":
         converted_value = time_conversion(orig_unit, converted_unit, value_to_convert)
-    elif t == 'distance':
+    elif t == 'Distance':
         converted_value = distance_conversion(orig_unit, converted_unit, value_to_convert)
-    elif t == 'weight_mass':
+    elif t == 'Weight/Mass':
         converted_value = weight_mass_conversion(orig_unit, converted_unit, value_to_convert)
-    elif t == 'angle':
+    elif t == 'Angle':
         converted_value = angle_conversion(orig_unit, converted_unit, value_to_convert)
-    elif t == 'prefix':
+    elif t == 'Metric Prefixes':
         converted_value = prefix_conversion(orig_unit, converted_unit, value_to_convert)
     else:
         converted_value = '-'
-    return float("{:.2f}".format(converted_value))
+    converted_value = float(converted_value)
+    return float("{:.3f}".format(converted_value))
 
 
 def time_conversion(original_unit, new_unit, original_value):
@@ -36,10 +58,6 @@ def time_conversion(original_unit, new_unit, original_value):
     :param original_value: the value that needs to be converted
     :return: what the equivalent of the original value is in terms of the new unit
     """
-    # list of equivalent values for [seconds, minutes, hours, days]
-    time_constants = [3600, 60, 1, 1/24]
-    # list of their corresponding unit names
-    time_units = ['sec', 'min', 'hours', 'days']
     #set defaults so that you can raise error later
     original_unit_index = -1
     new_unit_index = -1
@@ -62,10 +80,6 @@ def distance_conversion(original_unit, new_unit, original_value):
     :param original_value: the value that needs to be converted
     :return: what the equivalent of the original value is in terms of the new unit
     """
-    # list of equivalent values for [inch, feet, yards, mile, mm, cm, m, km]
-    distance_constants = [39.37, 3.28, 1.09, .00062137, 1000, 100, 1, .001]
-    # list of their corresponding unit names
-    distance_units = ['inch', 'feet', 'yards', 'mile', 'mm', 'cm', 'm', 'km']
     # set defaults so that you can raise error later
     original_unit_index = -1
     new_unit_index = -1
@@ -88,10 +102,6 @@ def weight_mass_conversion(original_unit, new_unit, original_value):
     :param original_value: the value that needs to be converted
     :return: what the equivalent of the original value is in terms of the new unit
     """
-    # list of equivalent values for [oz, lb, ton, kg, g]
-    w_m_constants = [16, 1, .0005, .4536, 453.6]
-    # list of their corresponding unit names
-    w_m_units = ['oz', 'lb', 'ton', 'kg']
     # set defaults so that you can raise error later
     original_unit_index = -1
     new_unit_index = -1
@@ -114,10 +124,6 @@ def angle_conversion(original_unit, new_unit, original_value):
     :param original_value: the value that needs to be converted
     :return: what the equivalent of the original value is in terms of the new unit
     """
-    # list of equivalent values for [radians, degrees]
-    angle_constants = [360, 2 * math.pi]
-    # list of their corresponding unit names
-    angle_units = ['degrees', 'radians']
     #set defaults so that you can raise error later
     original_unit_index = -1
     new_unit_index = -1
@@ -140,10 +146,6 @@ def prefix_conversion(original_unit, new_unit, original_value):
      :param original_value: the value that needs to be converted
      :return: what the equivalent of the original value is in terms of the new unit
      """
-    # list of orders of magnitude for [nano, micro, milli, centi, base, kilo, mega, giga]
-    prefix_constants = [-9, -6, -3, -2, 0, 3, 6, 9]
-    # list of their corresponding unit names
-    prefix_units = ['nano', 'micro', 'milli', 'centi', 'base', 'kilo', 'mega', 'giga']
     # set defaults so that you can raise error later
     original_unit_index = -1
     new_unit_index = -1

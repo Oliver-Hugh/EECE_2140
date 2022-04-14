@@ -83,41 +83,104 @@ gear_button.grid(row=4, column=0)
 unit_frame = LabelFrame(master=root, text="Unit Convertor", bg='#7a6d17')
 unit_frame.grid(row=1, column=1, padx=5, pady=5)
 
-#Drop Down menu for unit type
-type_frame = LabelFrame(unit_frame, text="Conversion Type", bg='#7a6d17')
+#Radio Buttons for unit type
+type_frame = LabelFrame(unit_frame, text="Conversion Type", bg='#ada168')
 type_frame.grid(row=0, column=0, padx=5, pady=5)
-conversion_options = ['Time', 'Distance', 'Weight/Mass', 'Angle', 'Metric Prefixes']
-#The type of conversion which will be decided by the user clicking
 conversion_type = StringVar()
-#But we will set it to first in list as default
-conversion_type.set(conversion_options[0])
-conversion_type_drop = OptionMenu(type_frame, conversion_type, *conversion_options)
-conversion_type_drop.pack(padx=5, pady=5)
 
-#Value to convert items
+
+def unit_conversion_type():
+    """
+    gets the conversion type from radio buttons and subsequently changes the drop-down
+    options for the actual unit selection (both convert from and to)
+    :return: None
+    """
+    con_type = str(conversion_type.get())
+    updated_unit_options = units.get_unit_list(con_type)
+
+    #update the initial unit
+    orig_unit.set(updated_unit_options[0])
+    updated_input_units_menu = OptionMenu(convert_frame, orig_unit, *updated_unit_options)
+    updated_input_units_menu.grid(row=3, column=0)
+
+    #Update the result unit
+    result_unit.set(updated_unit_options[0])
+    updated_result_unit_menu = OptionMenu(convert_result_frame, result_unit, *updated_unit_options)
+    updated_result_unit_menu.grid(row=1, column=0)
+
+
+time_radio = Radiobutton(type_frame, text="Time", variable=conversion_type, value='Time', command=unit_conversion_type,
+                         bg="#ada168")
+time_radio.grid(row=0, column=0, sticky="w")
+dist_radio = Radiobutton(type_frame, text="Distance", variable=conversion_type, value="Distance",
+                         command=unit_conversion_type, bg="#ada168")
+dist_radio.grid(row=1, column=0, sticky="w")
+wm_radio = Radiobutton(type_frame, text="Weight/Mass", variable=conversion_type, value="Weight/Mass",
+                       command=unit_conversion_type, bg="#ada168")
+wm_radio.grid(row=2, column=0, sticky="w")
+angle_radio = Radiobutton(type_frame, text="Angle", variable=conversion_type, value="Angle",
+                          command=unit_conversion_type, bg="#ada168")
+angle_radio.grid(row=3, column=0, sticky="w")
+metric_radio = Radiobutton(type_frame, text="Metric Prefixes", variable=conversion_type, value="Metric Prefixes",
+                           command=unit_conversion_type, bg="#ada168")
+metric_radio.grid(row=4, column=0, sticky="w")
+
+# Value to convert items
 convert_frame = LabelFrame(unit_frame, text="Unit to Convert")
 convert_frame.grid(row=1, column=0, pady=5, padx=5)
 convert_value_instruction = Label(convert_frame, text="Value to be Converted:", padx=5, pady=2)
-convert_value_instruction.pack()
+convert_value_instruction.grid(row=0, column=0)
 convert_value_entry = Entry(convert_frame, width=10)
-convert_value_entry.pack()
-#Drop-down of unit to convert from
+convert_value_entry.grid(row=1, column=0)
+#Unit to convert from
 convert_unit_instruction = Label(convert_frame, text="Original Unit:", padx=5, pady=2)
-convert_unit_instruction.pack()
-conversion_unit = StringVar()
-#use the get_unit_list from the "units" module to properly set the available unit options based on the conversion type
-conversion_unit_lst = units.get_unit_list(conversion_type.get())
-convert_units = OptionMenu(convert_frame, conversion_unit, *conversion_unit_lst)
-convert_units.pack()
-conversion_unit.set(units.get_unit_list(conversion_type.get())[0])
+convert_unit_instruction.grid(row=2, column=0)
+orig_unit = StringVar()
+#default set it to time (next 2 lines)
+unit_options = units.time_units
+orig_unit.set(unit_options[0])
+convert_units = OptionMenu(convert_frame, orig_unit, *unit_options)
+convert_units.grid(row=3, column=0)
 
-#Drop-down of unit to convert TO
+#Unit to convert TO
+convert_result_frame = LabelFrame(unit_frame, text="Equivalent Measure:")
+convert_result_frame.grid(row=2, column=0, padx=5, pady=5)
+convert_result_unit_instruction = Label(convert_result_frame, text="Resulting Unit:")
+convert_result_unit_instruction.grid(row=0, column=0)
+result_unit = StringVar()
+#set it to time as default to match the input
+result_unit_list = units.time_units
+result_unit.set(result_unit_list[0])
+result_unit_menu = OptionMenu(convert_result_frame, result_unit, *result_unit_list)
+result_unit_menu.grid(row=1, column=0)
 
-#Entry widget
+convert_result_instruction = Label(convert_result_frame, text="The equivalent unit is ", padx=5, pady=2)
+convert_result_instruction.grid(row=2, column=0)
+convert_result = Entry(convert_result_frame, width=10)
+convert_result.grid(row=3, column=0)
+
+#now that the initial and resulting unit frames have been created, turn the time radio button on by default
+time_radio.invoke()
+
+
+def compute_units():
+    """
+    Function for hitting the compute button and calculating the unit conversion. Logic is located in the 'units'
+    module. This function uses those functions to display it in the UI
+    :return:
+    """
+    initial_unit = str(orig_unit.get())
+    end_unit = str(result_unit.get())
+    type_to_convert = str(conversion_type.get())
+    conversion_value = float(convert_value_entry.get())
+    result_value = units.conversion(type_to_convert, initial_unit, end_unit, conversion_value)
+    convert_result.delete(0, END)
+    convert_result.insert(0, result_value)
+
 
 #button to press to make the conversion
-
-#display result
+compute_unit_button = Button(unit_frame, text="Compute", command=compute_units)
+compute_unit_button.grid(column=0, row=3, pady=5)
 
 
 #The Decimal/Fraction Convertor
@@ -247,6 +310,8 @@ def hardware_select():
     # insert the table
     table_frame = Frame(hardware_ref_frame, bg="#b59a19")
     table_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=15)
+    #This line creates a table object which is the reason the table shows up (because it is implemented in the
+    # reference section
     table_to_show = rTable(option, table_frame, row_offset=1)
 
 

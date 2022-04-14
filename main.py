@@ -14,45 +14,45 @@ root.title("Designer's Reference")
 #Instruction Frame
 instruction_frame = LabelFrame(master=root, text="Instructions", bg='#c9ad20')
 instruction_frame.grid(row=0, column=0, padx=5, pady=5, columnspan=4)
-instruction_text = """Hello! This is an application meant as a quick reference to designers working with CAD. 
-This is my final project for EECE 2140: Computing Fundamentals. Simply select between the 
-different options for each individual calculator/convertor and input data for results! -Oliver Hugh"""
-instruction_label = Label(master=instruction_frame, text=instruction_text, bg='#c9ad20', width=90)
-instruction_label.grid(row=0, column=0)
+instruction_text = "Hello! This is an application meant as a quick reference to designers working with CAD.\n" \
+                   "This is my final project for EECE 2140: Computing Fundamentals. Simply select between the\n " \
+                   "different options for each individual calculator/convertor and input data for results! -Oliver Hugh"
+instruction_label = Label(master=instruction_frame, text=instruction_text, bg='#c9ad20', width=130)
+instruction_label.grid(row=0, column=0, columnspan=4, pady=2)
 
 
 #The Gear Calculator Frame
 gear_frame = LabelFrame(master=root, text="Gear Calculator", bg='#c98a00')
 gear_frame.grid(row=1, column=0, padx=5, pady=5)
 gear_instructions = Label(gear_frame, text="Enter all information below \nto calculate center distance.", bg='#c98a00')
-gear_instructions.grid(column=0, row=0, padx=5)
+gear_instructions.grid(column=0, row=0, padx=5, pady=5)
 
 #entry for num teeth in gear 1
 gear_1_frame = LabelFrame(gear_frame, text="Gear 1 # of Teeth:", bg='#c98a00')
-gear_1_frame.grid(column=0, row=1, pady=5, padx=2)
+gear_1_frame.grid(column=0, row=1, pady=10, padx=4)
 gear_1_entry = Entry(gear_1_frame, width=15, bg='#f7e6d0')
 gear_1_entry.pack()
 #entry for num teeth in gear 2
 gear_2_frame = LabelFrame(gear_frame, text="Gear 2 # of Teeth:", bg='#c98a00')
-gear_2_frame.grid(column=0, row=2, pady=5, padx=2)
+gear_2_frame.grid(column=0, row=2, pady=10, padx=4)
 gear_2_entry = Entry(gear_2_frame, width=15, bg='#f7e6d0')
 gear_2_entry.pack()
 #Drop-down for dp
 dp_frame = LabelFrame(gear_frame, text="Diametral Pitch", bg='#f7e6d0')
-dp_frame.grid(column=0, row=3, pady=5, padx=2)
+dp_frame.grid(column=0, row=3, pady=20, padx=10)
 #list of standard diametral pitches
 dp_list = [12, 16, 18, 20, 24, 32, 48]
 dp = IntVar()
 dp_drop = OptionMenu(dp_frame, dp, *dp_list)
-dp_drop.pack()
+dp_drop.pack(pady=2)
 dp.set(dp_list[0])
 #include a blank label to increase the size of the frame
-spacer_label = Label(dp_frame, width=15, bg='#f7e6d0')
+spacer_label = Label(dp_frame, text="", width=15, bg='#f7e6d0')
 spacer_label.pack()
 gear_result_frame = LabelFrame(gear_frame, text="Center to Center distance:", bg='#f7e6d0')
-gear_result_frame.grid(row=5, column=0, pady=5)
+gear_result_frame.grid(row=5, column=0, pady=20)
 gear_result = Entry(gear_result_frame, width=15, bg='#f7e6d0')
-gear_result.pack()
+gear_result.pack(pady=8)
 
 
 def gear_calculation(gear_dp):
@@ -76,7 +76,7 @@ def gear_calculation(gear_dp):
 #function references the gear_result entry
 gear_button = Button(gear_frame, width=15, text="Calculate Result", command=lambda: gear_calculation(dp.get()),
                      bg='#f7e6d0')
-gear_button.grid(row=4, column=0)
+gear_button.grid(row=4, column=0, pady=10)
 
 
 #The Unit Calculator Frame

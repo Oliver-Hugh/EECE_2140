@@ -47,7 +47,7 @@ def conversion(type_to_convert, orig_unit, converted_unit, value_to_convert):
     else:
         converted_value = '-'
     converted_value = float(converted_value)
-    return float("{:.3f}".format(converted_value))
+    return float("{:.5f}".format(converted_value))
 
 
 def time_conversion(original_unit, new_unit, original_value):
@@ -66,7 +66,7 @@ def time_conversion(original_unit, new_unit, original_value):
             original_unit_index = i
         if new_unit == time_units[i]:
             new_unit_index = i
-    if original_unit_index or new_unit_index == -1:
+    if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown time units used")
     new_value = (original_value/time_constants[original_unit_index])*time_constants[new_unit_index]
     return new_value
@@ -88,7 +88,7 @@ def distance_conversion(original_unit, new_unit, original_value):
             original_unit_index = i
         if new_unit == distance_units[i]:
             new_unit_index = i
-    if original_unit_index or new_unit_index == -1:
+    if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown distance units used")
     new_value = (original_value / distance_constants[original_unit_index]) * distance_constants[new_unit_index]
     return new_value
@@ -110,7 +110,7 @@ def weight_mass_conversion(original_unit, new_unit, original_value):
             original_unit_index = i
         if new_unit == w_m_units[i]:
             new_unit_index = i
-    if original_unit_index or new_unit_index == -1:
+    if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown time units used")
     new_value = (original_value / w_m_constants[original_unit_index]) * w_m_constants[new_unit_index]
     return new_value
@@ -132,7 +132,7 @@ def angle_conversion(original_unit, new_unit, original_value):
             original_unit_index = i
         if new_unit == angle_units[i]:
             new_unit_index = i
-    if original_unit_index or new_unit_index == -1:
+    if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown time units used")
     new_value = (original_value/angle_constants[original_unit_index])*angle_constants[new_unit_index]
     return new_value
@@ -154,9 +154,9 @@ def prefix_conversion(original_unit, new_unit, original_value):
             original_unit_index = i
         if new_unit == prefix_units[i]:
             new_unit_index = i
-    if original_unit_index or new_unit_index == -1:
+    if original_unit_index == -1 or new_unit_index == -1:
         raise Exception("Unknown time units used")
-    new_value = (original_value / prefix_constants[original_unit_index]) * prefix_constants[new_unit_index]
+    new_value = (original_value / 10**prefix_constants[original_unit_index]) * 10**prefix_constants[new_unit_index]
     return new_value
 
 

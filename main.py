@@ -100,13 +100,13 @@ def unit_conversion_type():
 
     #update the initial unit
     orig_unit.set(updated_unit_options[0])
-    updated_input_units_menu = OptionMenu(convert_frame, orig_unit, *updated_unit_options)
-    updated_input_units_menu.grid(row=3, column=0)
+    convert_units = OptionMenu(convert_frame, orig_unit, *updated_unit_options)
+    convert_units.grid(row=3, column=0)
 
     #Update the result unit
     result_unit.set(updated_unit_options[0])
-    updated_result_unit_menu = OptionMenu(convert_result_frame, result_unit, *updated_unit_options)
-    updated_result_unit_menu.grid(row=1, column=0)
+    result_unit_menu = OptionMenu(convert_result_frame, result_unit, *updated_unit_options)
+    result_unit_menu.grid(row=1, column=0)
 
 
 time_radio = Radiobutton(type_frame, text="Time", variable=conversion_type, value='Time', command=unit_conversion_type,
@@ -173,6 +173,7 @@ def compute_units():
     end_unit = str(result_unit.get())
     type_to_convert = str(conversion_type.get())
     conversion_value = float(convert_value_entry.get())
+    print(initial_unit, end_unit, type_to_convert, conversion_value)
     result_value = units.conversion(type_to_convert, initial_unit, end_unit, conversion_value)
     convert_result.delete(0, END)
     convert_result.insert(0, result_value)

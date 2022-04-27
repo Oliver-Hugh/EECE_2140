@@ -99,6 +99,3 @@ def works_cited(area: str):
     citation_3.grid(row=2, column=0)
     citation_4 = Label(master=worked_cited_window, text=cite_4)
     citation_4.grid(row=3, column=0)
-
-
-

@@ -28,13 +28,21 @@ def repeating_nums(repeating_seq, static_num):
         #needs to be 1 - r exactly)
         #repeating_denominator = 1 - r"""
         repeating_numerator = str(repeating_seq)
-        print(repeating_numerator)
+        print("repeating numerator is", repeating_numerator)
         #get all numbers to the right of the decimal place
         repeating_numerator = repeating_numerator.split(".")[1]
-        print(repeating_numerator)
+        print("no decimal repeating numerator", repeating_numerator)
         if "0" in repeating_numerator:
-            jump = len(repeating_numerator.split("0")[1])
-            extra = len(repeating_numerator) - jump
+            extra = len(repeating_numerator)
+            print("extra is ", extra)
+            for num_char_index in range(len(repeating_numerator)):
+                if repeating_numerator[num_char_index] == "0":
+                    continue
+                else:
+                    jump = len(repeating_numerator[num_char_index:])
+            print("jump is ", jump)
+            #number of extra zeros
+            extra -= jump
         else:
             jump = len(repeating_numerator)
             extra = 0
@@ -82,6 +90,7 @@ def simplify(numerator: int, denominator: int):
         continue_checking = False
         #iterate from 2 to 1/2 of the smaller number
         counter = 0
+        print("denominator is", denominator)
         if numerator % denominator == 0:
             numerator /= denominator
             denominator /= denominator

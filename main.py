@@ -2,7 +2,7 @@ from tkinter import *
 
 import frac_dec
 import units
-import gears
+from gears_ui import GearCalculator
 from reference import Table as rTable
 from reference import works_cited
 
@@ -26,57 +26,8 @@ gear_frame = LabelFrame(master=root, text="Gear Calculator", bg='#c98a00')
 gear_frame.grid(row=1, column=0, padx=5, pady=5)
 gear_instructions = Label(gear_frame, text="Enter all information below \nto calculate center distance.", bg='#c98a00')
 gear_instructions.grid(column=0, row=0, padx=5, pady=5)
+gear_calc = GearCalculator(gear_frame)
 
-#entry for num teeth in gear 1
-gear_1_frame = LabelFrame(gear_frame, text="Gear 1 # of Teeth:", bg='#c98a00')
-gear_1_frame.grid(column=0, row=1, pady=10, padx=4)
-gear_1_entry = Entry(gear_1_frame, width=15, bg='#f7e6d0')
-gear_1_entry.pack()
-#entry for num teeth in gear 2
-gear_2_frame = LabelFrame(gear_frame, text="Gear 2 # of Teeth:", bg='#c98a00')
-gear_2_frame.grid(column=0, row=2, pady=10, padx=4)
-gear_2_entry = Entry(gear_2_frame, width=15, bg='#f7e6d0')
-gear_2_entry.pack()
-#Drop-down for dp
-dp_frame = LabelFrame(gear_frame, text="Diametral Pitch", bg='#f7e6d0')
-dp_frame.grid(column=0, row=3, pady=20, padx=10)
-#list of standard diametral pitches
-dp_list = [12, 16, 18, 20, 24, 32, 48]
-dp = IntVar()
-dp_drop = OptionMenu(dp_frame, dp, *dp_list)
-dp_drop.pack(pady=2)
-dp.set(dp_list[0])
-#include a blank label to increase the size of the frame
-spacer_label = Label(dp_frame, text="", width=15, bg='#f7e6d0')
-spacer_label.pack()
-gear_result_frame = LabelFrame(gear_frame, text="Center to Center distance:", bg='#f7e6d0')
-gear_result_frame.grid(row=5, column=0, pady=20)
-gear_result = Entry(gear_result_frame, width=15, bg='#f7e6d0')
-gear_result.pack(pady=8)
-
-
-def gear_calculation(gear_dp):
-    """
-    This function calculates the center to center distance of 2 gears using functions from the
-    gears file and inserts the result inside the gear_result entry
-    :param gear_dp: the diametral pitch of the gears
-    :return: None
-    """
-    teeth_1 = int(gear_1_entry.get())
-    teeth_2 = int(gear_2_entry.get())
-
-    if type(teeth_1) is int and type(teeth_2) is int and teeth_1 is not None and teeth_2 is not None:
-        #now use functions from the gears file to calculate the center to center distance
-        gear_answer = gears.calculate_center(teeth_1, teeth_2, gear_dp)
-        gear_result.delete(0, END)
-        gear_result.insert(END, str(gear_answer) + " in")
-
-
-#button to calculate. This is created after the entry (even though it is above it) because its command
-#function references the gear_result entry
-gear_button = Button(gear_frame, width=15, text="Calculate Result", command=lambda: gear_calculation(dp.get()),
-                     bg='#f7e6d0')
-gear_button.grid(row=4, column=0, pady=10)
 
 
 #The Unit Calculator Frame

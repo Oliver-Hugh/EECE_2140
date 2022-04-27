@@ -41,7 +41,7 @@ class Table:
         ["#10", "3/8", "1/8"],
         ["1/4", "7/16", "3/16"]]
 
-    def __init__(self, data: int, area: str, row_offset: int):
+    def __init__(self, data: int, area, row_offset: int):
         """
         Initiates a Table object, which will create a table in tkinter
         to display data

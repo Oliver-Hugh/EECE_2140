@@ -2,6 +2,85 @@
 from tkinter import *
 
 
+class ReferenceUI:
+    def __init__(self, master_frame):
+        self.master = master_frame
+        # picking the size (metric vs standard)
+        hardware_sys_frame = LabelFrame(self.master, text="System")
+        hardware_sys_frame.grid(column=0, row=0, pady=20)
+        # radio buttons to pick between metric and standard
+        self.var_1 = StringVar()  # For the system
+        self.var_2 = StringVar()  # For the type
+        standard_hardware = Radiobutton(hardware_sys_frame, text="Standard", variable=self.var_1, value="s",
+                                        command=self.hardware_select)
+        standard_hardware.pack(side=LEFT)
+        # set the standard system on as default
+        standard_hardware.invoke()
+        metric_hardware = Radiobutton(hardware_sys_frame, text="Metric", variable=self.var_1, value="m",
+                                      command=self.hardware_select)
+        metric_hardware.pack(side=LEFT)
+
+        # picking the type of hardware
+        hardware_type_frame = LabelFrame(self.master, text="Type")
+        hardware_type_frame.grid(column=1, row=0, pady=20)
+        # radio buttons to pick between nuts and machine screws
+        screws = Radiobutton(hardware_type_frame, text="Screws", variable=self.var_2, value="sc",
+                             command=self.hardware_select)
+        screws.pack(side=LEFT)
+        # set this as the default
+        screws.invoke()
+        nuts = Radiobutton(hardware_type_frame, text='Nuts', variable=self.var_2, value="n",
+                           command=self.hardware_select)
+        nuts.pack(side=LEFT)
+
+        # hardware works cited
+        works_cited_frame = LabelFrame(self.master, text="My References")
+        works_cited_frame.grid(row=10, column=0, columnspan=3, pady=20)
+        works_cited_button = Button(works_cited_frame, text="Click for Works Cited", command=lambda:
+                                    works_cited(works_cited_frame), width=30, bg="#a89a6a")
+        works_cited_button.pack(pady=10)
+
+    def hardware_select(self):
+        """
+        This function updates the variables sys_selection and type_selection for whenever the radio buttons for
+        HARDWARE REFERENCE are selected. It also sets the value of the global variable option. This function is only to
+        be used for hardware selection (type and system), and not for other aspects of the GUI.
+        :return: None
+        """
+        sys_selection = str(self.var_1.get())
+        type_selection = str(self.var_2.get())
+        """
+        Create a table object later on to show the table at the end of this function. From
+        that file, the options are:
+
+        1: metric screws, 2: standard screws 3: metric nuts 4: standard nuts
+        """
+        # variable to select the table
+        #set it to 1 as default because: if one of the buttons is uninitiated in the code (due to the order of invoking)
+        #for example, the first set of buttons is invoked and then the second. When the first set is invoked, the second
+        # has no value, so it needs this default case
+        option = 2
+
+        # standard
+        if sys_selection == "s":
+            if type_selection == "sc":
+                option = 2
+            elif type_selection == "n":
+                option = 4
+        # metric
+        elif sys_selection == "m":
+            if type_selection == "sc":
+                option = 1
+            elif type_selection == "n":
+                option = 3
+        # insert the table
+        table_frame = Frame(self.master, bg="#b59a19")
+        table_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=15)
+        # This line creates a table object which is the reason the table shows up (because it is implemented in the
+        # reference section
+        table_to_show = Table(option, table_frame, row_offset=1)
+
+
 class Table:
 
     metric_screws = [
@@ -79,7 +158,7 @@ class Table:
                 self.box.insert(END, data[r][c])
 
 
-def works_cited(area: str):
+def works_cited(area):
     worked_cited_window = Toplevel(area)
     worked_cited_window.title("Works Cited")
     cite_1 = """[1]    Bolt Depot. "Metric Nut Sizes", boltdepot.com

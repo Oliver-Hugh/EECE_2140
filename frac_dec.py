@@ -1,5 +1,4 @@
 #Oliver Hugh 4/4/2022
-import math
 
 
 def repeating_nums(repeating_seq, static_num):
@@ -32,6 +31,8 @@ def repeating_nums(repeating_seq, static_num):
         #get all numbers to the right of the decimal place
         repeating_numerator = repeating_numerator.split(".")[1]
         print("no decimal repeating numerator", repeating_numerator)
+        #default no jump
+        jump = 0
         if "0" in repeating_numerator:
             extra = len(repeating_numerator)
             print("extra is ", extra)
@@ -50,7 +51,7 @@ def repeating_nums(repeating_seq, static_num):
         repeating_denominator = ""
         for k in range(jump):
             repeating_denominator += "9"
-        for l in range(extra):
+        for m in range(extra):
             repeating_denominator += "0"
         print(repeating_numerator)
         print(repeating_denominator)
@@ -61,7 +62,7 @@ def repeating_nums(repeating_seq, static_num):
         #make sure it is a whole number
         while static_num_numerator % 10:
             static_num_numerator *= 10
-            #We also must make sure we update the repeating number so they have the same denominator
+            #We also must make sure we update the repeating number, so they have the same denominator
             repeating_numerator *= 10
             repeating_denominator *= 10
         new_numerator = static_num_numerator + repeating_numerator
@@ -89,7 +90,6 @@ def simplify(numerator: int, denominator: int):
     while continue_checking:
         continue_checking = False
         #iterate from 2 to 1/2 of the smaller number
-        counter = 0
         print("denominator is", denominator)
         if numerator % denominator == 0:
             numerator /= denominator

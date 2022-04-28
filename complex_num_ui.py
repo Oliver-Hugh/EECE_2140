@@ -33,18 +33,21 @@ class ComplexNumUI:
                                  command=self.form_select)
         rect_radio.grid(row=0, column=1)
 
-        result_entry = Entry(answer_label_frame, width=10)
-        result_entry.grid(row=1, column=0, columnspan=2, padx=5)
+        self.result_entry = Entry(answer_label_frame, width=10)
+        self.result_entry.grid(row=1, column=0, columnspan=2, padx=5)
         compute_button = Button(answer_label_frame, text="Compute", width=5, command=self.compute)
         compute_button.grid(row=2, column=0, columnspan=2)
 
     def form_select(self):
         answer_form = str(self.var_1.get())
-        print(answer_form)
+        return answer_form
 
     def compute(self):
+        self.result_entry.delete(0, END)
         string_exp = self.input_entry.get()
-        answer = ComplexExpression(string_exp)
+        print(self.form_select())
+        answer = ComplexExpression(string_exp, self.form_select()).answer
+        self.result_entry.insert(END, answer)
 
     def angle_press(self):
         self.input_entry.insert(END, u"\u2220")

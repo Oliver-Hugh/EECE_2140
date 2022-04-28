@@ -7,6 +7,7 @@ class ComplexExpression:
         self.orig_string = orig_string
         self.expr_lst = self.process(self.orig_string)
         print("the list is ", self.expr_lst)
+        print(ComplexExpression.convert_to_polar(self.orig_string))
 
     @staticmethod
     def process(exp):
@@ -24,8 +25,8 @@ class ComplexExpression:
         #elements will be either a term or operator in the list +-*/
         last_element_term = False
         #this for loop separates the string into individual terms and operators
-        in_parenthesis = False
-        for i in range(len(exp)):
+        #in_parenthesis = False
+        """for i in range(len(exp)):
             #if an operator
             if exp[i] in "*/":
                 last_element_term = False
@@ -79,7 +80,49 @@ class ComplexExpression:
                     in_parenthesis = False
                 else:
                     raise ValueError("Invalid Parenthesis order")
+        return exp_lst"""
+        last_term_op = True
+        intermediate_parenthesis = ""
+        for ind in range(1, len(exp)):
+
+            #there should never be 2 operators in a row
+            if exp[ind] == "*" or exp[ind] == "/" or exp[ind] == "+" or exp[ind] == "-":
+                if last_term_op:
+                    raise ValueError("Cannot have 2 operators in a row")
+                else:
+                    last_term_op = True
+                    exp_lst.append(exp[ind])
+            if last_term_op:
+                exp_lst.append(exp[ind])
+                last_term_op = False
+            if exp[ind] == "(":
+                #move to the next character (first character inside the parenthesis)
+                ind += 1
+                while ind < len(exp) and exp[ind] != ")":
+                    intermediate_parenthesis += exp[ind]
+                #now we have a separate string of all the characters inside the () while not including ()
+                #we need to convert this list into a string of one simplified term in polar form so that if
+                #there is multiplication or division on either side, we don't have to worry about errors where only
+                #1 term of many actually undergoes the operation
+                lst_to_add = ComplexExpression.process(intermediate_parenthesis)
+                term_to_add = ComplexExpression.simplify_to_one_term(lst_to_add)
+                exp_lst.append(term_to_add)
+
         return exp_lst
+
+    @staticmethod
+    def simplify_to_one_term(lst):
+        """
+
+        :param lst: a list of terms to combine into 1 in polar form
+        :return:
+        """
+        for ind in range(len(lst)):
+            if lst[ind] == "*":
+                pass
+        return 0
+
+
 
     def reduce_parenthesis(self):
         new_lst = []
@@ -116,8 +159,7 @@ class ComplexExpression:
                     #check if addition or subtraction for previous term
                     if self.expr_lst[i-1][1] == 1:
                         new_term = ComplexExpression.add_or_subtract(term_1=self.expr_lst[i-2][0],
-                                                                     term_2=self.expr_lst[i][0],
-                                                                     operation=self.expr_lst[i][0])
+                                                                     term_2=self.expr_lst[i][0])
                         new_lst.append(new_term)
                         #delete the 2 terms already in the list that were just operated on because they are now
                         # accounted for in the new term.
@@ -127,8 +169,7 @@ class ComplexExpression:
                     # check if add/sub for next term
                     if self.expr_lst[i + 1][1] == 1:
                         new_term = ComplexExpression.add_or_subtract(term_1=self.expr_lst[i][0],
-                                                                     term_2=self.expr_lst[i + 2][0],
-                                                                     operation=self.expr_lst[i + 1][0])
+                                                                     term_2=self.expr_lst[i + 2][0])
                         new_lst.append(new_term)
                         # move to next iteration but skip two ahead to account for already operated terms
                         i -= 2
@@ -172,39 +213,39 @@ class ComplexExpression:
         term_2_split = term_2.split("+")
         #from the convert to rect method, we get the numbers in the form a + bi or (-bi) or just a or just bj
         real_part = float(term_1_split[0]) + float(term_2_split[0])
-        im_coefficient = float(term_1_split[:-1]) + float(term_2_split[:-1])
+        im_coefficient = float(str(term_1_split[:-1])) + float(str(term_2_split[:-1]))
         string_answer = "{:.3f}".format(real_part) + "+" + "{:.3f}".format(im_coefficient) + "i"
         return string_answer
 
     @staticmethod
     def convert_to_polar(term):
         """
-        Takes a string representation of a complex number in RECTANGULAR FORM and converts it to POLAR FORM
+        Takes a string representation of a complex number in RECTANGULAR FORM  (in the form: a + -bj; it can use i
+        instead and might not have a negative sign)and converts it to POLAR FORM
         :param term: string of a complex number
         :return: a string of the term in polar form
         """
-        lst = []
-        last_term_num = False
-        im_in_last = False
-        for ind in range(len(term)):
-            if term[ind].isdigit() or term[ind] == ".":
-                if last_term_num or im_in_last:
-                    lst[-1] += term[ind]
-                else:
-                    lst.append(term[ind])
-                    last_term_num = True
-                    im_in_last = False
-            elif term[ind] == "+":
-                continue
-            elif term[ind] == "-":
-                last_term_num = True
-                im_in_last = False
-                lst.append(term[ind])
-
-        return 3
+        term_lst = term.split("+")
+        real_part = float(term_lst[0])
+        im_coefficient = float(term_lst[1][:-1])
+        magnitude = math.sqrt(math.pow(real_part, 2) + math.pow(im_coefficient, 2))
+        angle = math.atan(im_coefficient/real_part)
+        answer_string = "{:.3f}".format(magnitude) + u"\u2220" + "{:.3f}".format(angle)
+        return answer_string
 
     @staticmethod
     def convert_to_rect(term):
+        """
+        Takes a string representation of a number in polar form in the format 'number u"\u2220" number' and converts
+        it to rectangular form
+        :param term: string representation of a number in polar form
+        :return: string representation of a number in polar form
+        """
         #will return a+-bj if there is a negative (will always include the +)
-        print(term)
-        return 4
+        term_lst = term.split(u"\u2220")
+        magnitude = float(term_lst[0])
+        angle = float(term_lst[1])
+        real_part = magnitude * math.cos(angle)
+        im_part = magnitude * math.sin(angle)
+        answer_string = "{:.3f}".format(real_part) + "+" + "{:.3f}".format(im_part) + "i"
+        return answer_string

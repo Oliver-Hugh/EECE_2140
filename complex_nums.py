@@ -138,78 +138,73 @@ class ComplexExpression:
     @staticmethod
     def mult_or_division(term_1, term_2, operation):
         if u"\u2220" not in term_1:
-            ComplexExpression.convert_to_polar(term_1)
+            term_1 = ComplexExpression.convert_to_polar(term_1)
         if u"\u2220" not in term_2:
-            ComplexExpression.convert_to_polar(term_2)
-        return 1
+            term_2 = ComplexExpression.convert_to_polar(term_2)
+        #now we have 2 polar numbers
+        lst_coefficients = []
+        lst_angles = []
+        #find where the polar symbol is and partition
+        ind_1 = term_1.index(u"\u2220")
+        lst_coefficients.append(term_1[:ind_1])
+        lst_angles.append(term_1[ind_1 + 1:])
+        ind_2 = term_2.index(u"\u2220")
+        lst_coefficients.append(term_2[:ind_2])
+        lst_angles.append(term_2[ind_2 + 1:])
+        if operation == "*":
+            new_coefficient = float(lst_coefficients[0]) * float(lst_coefficients[1])
+            new_angle = float(lst_angles[0]) + float(lst_angles[1])
+        #if operation is division
+        else:
+            new_coefficient = float(lst_coefficients[0]) / float(lst_coefficients[1])
+            new_angle = float(lst_angles[0]) - float(lst_angles[1])
+        resulting_term = str(new_coefficient) + u"\u2220" + str(new_angle)
+        return resulting_term
 
     @staticmethod
-    def add_or_subtract(term_1, term_2, operation):
-        print(term_1)
-        print(term_2)
-        print(operation)
-        return 2
+    def add_or_subtract(term_1, term_2):
+        if u"\u2220" in term_1:
+            term_1 = ComplexExpression.convert_to_rect(term_1)
+        if u"\u2220" in term_2:
+            term_2 = ComplexExpression.convert_to_rect(term_2)
+        #now we have 2 rectangular numbers
+        term_1_split = term_1.split("+")
+        term_2_split = term_2.split("+")
+        #from the convert to rect method, we get the numbers in the form a + bi or (-bi) or just a or just bj
+        real_part = float(term_1_split[0]) + float(term_2_split[0])
+        im_coefficient = float(term_1_split[:-1]) + float(term_2_split[:-1])
+        string_answer = "{:.3f}".format(real_part) + "+" + "{:.3f}".format(im_coefficient) + "i"
+        return string_answer
 
     @staticmethod
     def convert_to_polar(term):
         """
-        Takes a string representation of a complex number and converts it to polar form if it is not already
+        Takes a string representation of a complex number in RECTANGULAR FORM and converts it to POLAR FORM
         :param term: string of a complex number
         :return: a string of the term in polar form
         """
         lst = []
         last_term_num = False
-        last_term_e = False
         im_in_last = False
-        #there will only be + or - if it is in rectangular form
-        for i in range(len(term)):
-            if term[i] == "i" or term[i] == "j":
-                last_term_e = False
-                im_in_last = True
-                if last_term_num:
-                    lst[-1] += term[i]
-            if term[i].isdigit() or term[i] == ".":
-                last_term_e = False
+        for ind in range(len(term)):
+            if term[ind].isdigit() or term[ind] == ".":
                 if last_term_num or im_in_last:
-                    lst[-1] += term[i]
+                    lst[-1] += term[ind]
                 else:
+                    lst.append(term[ind])
                     last_term_num = True
-                    lst.append(term[i])
                     im_in_last = False
-            #does not yet support division
-            elif term[i] == "*":
-                last_term_e = False
-                last_term_num = False
-                im_in_last = False
+            elif term[ind] == "+":
                 continue
-            elif term[i] in "+-":
-                last_term_e = False
-                last_term_num = False
+            elif term[ind] == "-":
+                last_term_num = True
                 im_in_last = False
-                lst.append(term[i])
-            elif term[i] == "p":
-                last_term_num = False
-                last_term_e = False
-                im_in_last = False
-                lst.append(math.pi)
-            elif term[i] == "^" and last_term_e:
-                lst[-1] += "^"
-                last_term_e = False
-        #now we have a list of each individual components of the term
-        coefficients_of_im = []
-        standard_coefficients = []
-        for ind in range(len(lst)):
-            index = lst[ind].find("i")
-            if index == -1:
-                index = lst[ind].find("j")
-            #if there is an imaginary component to the number
-            #if there is no imaginary component to the number
-            if index == -1:
-                print("ugh")
+                lst.append(term[ind])
 
         return 3
 
     @staticmethod
     def convert_to_rect(term):
+        #will return a+-bj if there is a negative (will always include the +)
         print(term)
         return 4

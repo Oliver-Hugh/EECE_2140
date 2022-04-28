@@ -17,6 +17,9 @@ class ComplexNumUI:
         self.input_entry = Entry(input_frame, width=25)
         self.input_entry.pack(side=TOP)
 
+        angle_button = Button(input_frame, width=5, text=u"\u2220", command=self.angle_press)
+        angle_button.pack(side=TOP)
+
         answer_label_frame = LabelFrame(self.master, text="Result")
         answer_label_frame.grid(row=0, column=1)
         self.var_1 = StringVar()
@@ -41,4 +44,7 @@ class ComplexNumUI:
     def compute(self):
         string_exp = self.input_entry.get()
         answer = ComplexExpression(string_exp)
+
+    def angle_press(self):
+        self.input_entry.insert(END, u"\u2220")
 

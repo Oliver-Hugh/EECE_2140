@@ -3,6 +3,7 @@ from units_ui import UnitsUI
 from gears_ui import GearCalculator
 from frac_dec_ui import FracDecUI
 from reference import ReferenceUI
+from complex_num_ui import ComplexNumUI
 
 root = Tk()
 
@@ -43,5 +44,9 @@ hardware_ref_frame = LabelFrame(root, text="Hardware Reference", bg='#b8341a')
 hardware_ref_frame.grid(row=1, column=3, padx=5, pady=5)
 ref_display = ReferenceUI(hardware_ref_frame)
 
+#Complex Number Frame
+complex_frame = LabelFrame(root, text="Complex Number Calculator")
+complex_frame.grid(row=2, column=0, columnspan=2)
+complex_calc = ComplexNumUI(complex_frame)
 
 root.mainloop()

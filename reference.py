@@ -78,7 +78,7 @@ class ReferenceUI:
         table_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=15)
         # This line creates a table object which is the reason the table shows up (because it is implemented in the
         # reference section
-        table_to_show = Table(option, table_frame, row_offset=1)
+        Table(option, table_frame, row_offset=1)
 
 
 class Table:

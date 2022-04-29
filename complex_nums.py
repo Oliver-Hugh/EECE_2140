@@ -12,12 +12,12 @@ class ComplexExpression:
     @staticmethod
     def process(exp):
         """
-        This method iterates through a string and creates a list of lists of length 2. The first element
-        is either a term or operator, and the second is a number corresponding to the order of operation based on the
-        numbers below:
-        term = 0, * and /: 2, + and -: 1, parenthesis: 3   (NOT including terms after the angle symbol)
+        This method iterates through a string representing an equation and creates a list with the different terms
+        and operators in the string separated. If there are parenthesis in the equation, it will handle them by
+        recursively calling itself to deal with the parenthesis as its own sub-string. This method will then call
+        the simplify_to_one_term function to reduce the list of terms into 1 number in polar form
         :param exp: the string to iterate through
-        :return: the list of lists discussed above
+        :return: a string representation of a number in polar form
         """
         #a list of lists (of length 2): term or operator, integer indicating order of operation, as discussed
         # in docstrings
@@ -36,10 +36,6 @@ class ComplexExpression:
                 if exp[ind-1] == ")":
                     exp_lst.append(exp[ind])
                     last_term_op = True
-                elif last_term_op:
-                    #print("ERROR: the last term was ", exp[ind-1], " and the current is ", exp[ind])
-                    #raise ValueError("Cannot have 2 operators in a row")
-                    pass
                 else:
                     last_term_op = True
                     exp_lst.append(exp[ind])
@@ -79,6 +75,12 @@ class ComplexExpression:
 
     @staticmethod
     def simplify_to_one_term(lst):
+        """
+        Takes a list of terms and returns what the expression would be evaluated in a string representing a complex
+        number in polar form
+        :param lst: a list of terms in an expression
+        :return: a string of a complex number in POLAR form
+        """
         if len(lst) == 1:
             return ComplexExpression.convert_to_polar(lst[0])
         new_lst = []
@@ -160,6 +162,13 @@ class ComplexExpression:
 
     @staticmethod
     def mult_or_division(term_1, term_2, operation):
+        """
+        multiplies or divides 2 terms and returns the result in polar form (as a string)
+        :param term_1: a (complex?) number as a string
+        :param term_2: a (complex?) number as a string
+        :param operation: "*" or "/"
+        :return: the product/ quotient of the 2 numbers as a polar string
+        """
         term_1 = ComplexExpression.convert_to_polar(term_1)
         term_2 = ComplexExpression.convert_to_polar(term_2)
         print("term 1", term_1)
@@ -186,6 +195,12 @@ class ComplexExpression:
 
     @staticmethod
     def add_or_subtract(term_1, term_2):
+        """
+        Adds or subtracts 2 terms and then returns the sum in polar form
+        :param term_1: a (complex?) number as a string
+        :param term_2: a (complex?) number as a string
+        :return: a string of a polar complex number that is the sum or difference of the 2 terms
+        """
         term_1 = ComplexExpression.convert_to_rect(term_1)
         term_2 = ComplexExpression.convert_to_rect(term_2)
         #now we have 2 rectangular numbers
@@ -318,10 +333,19 @@ class ComplexExpression:
 
     @staticmethod
     def reduce_polar_coordinates(polar_string):
+        """
+        Takes a polar string in the format number angle symbol number and reduces the angle (the second number) so it
+        is
+        :param polar_string: a string of a polar number. Ex format: 2.344u"\u2220"4.345
+        :return: a polar string with the angle reduced
+        """
         polar_lst = polar_string.split(u"\u2220")
         angle = float(polar_lst[1])
-        while angle > math.pi:
-            angle -= 2 * math.pi
+        print(angle)
+        if angle > math.pi:
+            while angle > math.pi:
+                angle -= 2 * math.pi
+        elif angle < -1 * math.pi:
+            while angle < math.pi:
+                angle += 2 * math.pi
         return polar_lst[0] + u"\u2220" + "{:.3f}".format(angle)
-
-

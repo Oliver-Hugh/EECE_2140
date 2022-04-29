@@ -26,13 +26,11 @@ class ComplexExpression:
         last_term_op = True
         skip_to = 0
         for ind in range(len(exp)):
-            print("at the beginning of hte loop, exp list is  ", exp_lst)
             #if skip_to:
             ind += skip_to
             #now that we've skipped ahead in the previous if statement, we might be done:
             if ind > len(exp) - 1:
                 break
-            print("ind is ", ind)
             #there should never be 2 operators in a row (excluding -)
             if exp[ind] == "*" or exp[ind] == "/" or exp[ind] == "+":
                 if exp[ind-1] == ")":
@@ -68,7 +66,6 @@ class ComplexExpression:
                 #there is multiplication or division on either side, we don't have to worry about errors where only
                 #1 term of many actually undergoes the operation
                 term_to_add = ComplexExpression.process(intermediate_parenthesis)
-                print("lst to add", term_to_add)
                 exp_lst.append(term_to_add)
                 #last_term_op = False
             elif last_term_op:
@@ -77,51 +74,66 @@ class ComplexExpression:
             #if the last term was not an operator
             else:
                 exp_lst[-1] += exp[ind]
-        print("exp list is ", exp_lst)
         answer_string = ComplexExpression.simplify_to_one_term(exp_lst)
         return answer_string
 
     @staticmethod
     def simplify_to_one_term(lst):
-        print("list to simplify, ", lst)
         if len(lst) == 1:
             return ComplexExpression.convert_to_polar(lst[0])
         new_lst = []
         max_index = len(lst)-1
         #due to order of operations, we need to iterate through the list once and see if there are any * or / before
         #we can check for + or -
+        skip_amount = 0
+        skip = False
+        print(max_index)
         for i in range(max_index+1):
+            if skip:
+                i += skip_amount
             #check if there is an operator to the left and right:
-            if i < max_index:
+            print("max index is ", max_index, " and i is ", i)
+            if i < len(lst):
                 """for all comparisons under this if statement, we need to use the new list (which is updated for 
                 what is left in the list) when comparing to the left, and use self.expr_lst when comparing to 
                 terms to the right"""
+                print("RIGHT HERE    lst[i] is ", lst[i])
+                print("and the i is ", i)
                 if lst[i] == '*' or lst[i] == "/":
                     new_term = ComplexExpression.mult_or_division(term_1=new_lst[-1],
                                                                   term_2=lst[i+1],
                                                                   operation=lst[i])
                     # delete the term already in the list that was just operated on because it is now
                     # accounted for in the new term.
+                    print("multiplying ", new_lst[-1], "and ", lst[i+1])
+                    print("the answer is ", new_term)
+                    print("new list before deletion ", new_lst)
                     del new_lst[-1]
+                    print("new list after deletion ",  new_lst)
                     new_lst.append(new_term)
+                    print("list after appendage", new_lst)
                     #now skip one iteration and move onto the next one to skip over the term we just assessed
-                    i += 1
+                    skip = True
+                    skip_amount += 1
                     continue
-            new_lst.append(lst[i])
+                print("before adding, i is ", i, "and the max i is ", max_index)
+                new_lst.append(lst[i])
+                print("new list: ", new_lst)
+                print('old list: ', lst)
 
         #now we can iterate through again and see if there is + or -
         #the new_lst has the thus far updated terms, so we will iterate through it
         lst = new_lst
         #and we also need to create a new list to put the even more updated terms into
         newer_lst = []
+        skip_amount = 0
         if len(lst) == 1:
             newer_lst.append(lst[0])
         skip = False
         for i in range(len(lst)):
             if skip:
-                i += 1
-            #print(newer_lst)
-            if i < len(lst) - 1:
+                i += skip_amount
+            if i < len(lst):
                 #check if addition or subtraction
                 if lst[i] == "+" or lst[i] == "-":
                     new_term = ComplexExpression.add_or_subtract(term_1=newer_lst[-1],
@@ -129,20 +141,29 @@ class ComplexExpression:
                     new_term = ComplexExpression.convert_to_polar(new_term)
                     # delete the term already in the list that was just operated on because it is now
                     # accounted for in the new term.
+                    #print("the term going to be deleted is ", newer_lst[-1])
+                    #print("the term going to added is ", new_term)
                     del newer_lst[-1]
+                    #print("the list after deleting is ", newer_lst)
                     newer_lst.append(new_term)
+                    #print("the list after adding is ", newer_lst)
+                    #print(len(newer_lst), "is the length of the new list and should be 1")
                     # now skip one iteration and move onto the next one to skip over the term we just assessed
                     skip = True
+                    skip_amount += 1
                     continue
+                #print("adding at the bottom ", lst[i])
                 newer_lst.append(lst[i])
+                print("newer list: ", newer_lst)
+                print("older list: ", lst)
         return newer_lst[0]
 
     @staticmethod
     def mult_or_division(term_1, term_2, operation):
-        if u"\u2220" not in term_1:
-            term_1 = ComplexExpression.convert_to_polar(term_1)
-        if u"\u2220" not in term_2:
-            term_2 = ComplexExpression.convert_to_polar(term_2)
+        term_1 = ComplexExpression.convert_to_polar(term_1)
+        term_2 = ComplexExpression.convert_to_polar(term_2)
+        print("term 1", term_1)
+        print("term2 ", term_2)
         #now we have 2 polar numbers
         lst_coefficients = []
         lst_angles = []
@@ -165,21 +186,15 @@ class ComplexExpression:
 
     @staticmethod
     def add_or_subtract(term_1, term_2):
-        #if u"\u2220" in term_1:
-        print("term 1 and term 2 before adding or subtracting: ", term_1, term_2)
         term_1 = ComplexExpression.convert_to_rect(term_1)
-        #if u"\u2220" in term_2:
         term_2 = ComplexExpression.convert_to_rect(term_2)
         #now we have 2 rectangular numbers
         term_1_split = term_1.split("+")
         term_2_split = term_2.split("+")
-        #print("term 1:", term_1_split)
-        #print("term 2", term_2_split)
         #from the convert to rect method, we get the numbers in the form a + bi or (-bi) or just a or just bj
         real_part = float(term_1_split[0]) + float(term_2_split[0])
         im_coefficient = float(str(term_1_split[1][:-1])) + float(str(term_2_split[1][:-1]))
         string_answer = "{:.3f}".format(real_part) + "+" + "{:.3f}".format(im_coefficient) + "i"
-        #print("string_answer is ", string_answer)
         return string_answer
 
     @staticmethod
@@ -194,6 +209,7 @@ class ComplexExpression:
         if u"\u2220" in term:
             return term
         term_lst = term.split("+")
+        real_part = 0
         #if only one term
         if len(term_lst) == 1:
             im_index = term_lst[0].find("i")
@@ -204,8 +220,11 @@ class ComplexExpression:
                 real_part = float(term_lst[0])
                 im_coefficient = 0
             else:
+                #if it is only i or only j
+                if len(term_lst[0]) == 1:
+                    im_coefficient = 1
                 #if it's at beginning
-                if im_index == 0:
+                elif im_index == 0:
                     im_coefficient = float(term_lst[0][1:])
                     real_part = 0
                 #if at end
@@ -224,37 +243,49 @@ class ComplexExpression:
             else:
                 im_coefficient = float(term_lst[1][:-1])
             real_part = float(term_lst[0])
-        magnitude = math.sqrt(math.pow(real_part, 2) + math.pow(im_coefficient, 2))
         if real_part != 0:
             angle = math.atan(im_coefficient / real_part)
             if real_part < 0 < im_coefficient:
                 angle += math.pi
-            if im_coefficient < 0 > real_part:
-                angle -= math.pi
+            if im_coefficient < 0 and 0 > real_part:
+                angle += math.pi
         else:
-            angle = math.pi / 2
+            #if there is no real component
+            if im_coefficient < 0:
+                angle = -1 * math.pi / 2
+            else:
+                angle = math.pi / 2
+        if im_coefficient == 0:
+            if real_part < 0:
+                angle = math.pi
+            else:
+                angle = 0
+        magnitude = math.sqrt(math.pow(real_part, 2) + math.pow(im_coefficient, 2))
         answer_string = "{:.3f}".format(magnitude) + u"\u2220" + "{:.3f}".format(angle)
+        print("polar conversion = ", answer_string)
         return answer_string
 
     @staticmethod
     def convert_to_rect(term):
         """
-        Takes a string representation of a number in polar form in the format 'number u"\u2220" number' and converts
-        it to rectangular form
-        :param term: string representation of a number in polar form
+        Takes a string representation of a (probably) complex  number and converts it to rectangular form
+        :param term: string representation of a complex number
         :return: string representation of a number in polar form
         """
         #will return a+-bj if there is a negative (will always include the +)
         term_lst = term.split(u"\u2220")
-        print(term_lst, "is term list")
-        #make sure that it was polar in the first place
+        #set to 0 as default so not referenced before assignment (but an error will be thrown if they aren't assigned
+        #new values later)
+        real_part = 0
+        im_part = 0
+        # make sure that it was polar in the first place
         if len(term_lst) == 2:
             magnitude = float(term_lst[0])
             angle = float(term_lst[1])
             real_part = magnitude * math.cos(angle)
             im_part = magnitude * math.sin(angle)
         #if it was rectangular but not in the right format for our processing:
-        if len(term_lst) == 1:
+        elif len(term_lst) == 1:
             ind = term_lst[0].find("i")
             if ind == -1:
                 ind = term_lst[0].find("j")
@@ -280,6 +311,17 @@ class ComplexExpression:
 
     def final_answer(self):
         if self.answer_format == "po":
-            return ComplexExpression.convert_to_polar(self.answer)
+            unreduced_polar_coordinates = ComplexExpression.convert_to_polar(self.answer)
+            return ComplexExpression.reduce_polar_coordinates(unreduced_polar_coordinates)
         elif self.answer_format == "r":
             return ComplexExpression.convert_to_rect(self.answer)
+
+    @staticmethod
+    def reduce_polar_coordinates(polar_string):
+        polar_lst = polar_string.split(u"\u2220")
+        angle = float(polar_lst[1])
+        while angle > math.pi:
+            angle -= 2 * math.pi
+        return polar_lst[0] + u"\u2220" + "{:.3f}".format(angle)
+
+

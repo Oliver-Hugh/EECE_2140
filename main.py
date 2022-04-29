@@ -45,8 +45,8 @@ hardware_ref_frame.grid(row=1, column=3, padx=5, pady=5)
 ref_display = ReferenceUI(hardware_ref_frame)
 
 #Complex Number Frame
-complex_frame = LabelFrame(root, text="Complex Number Calculator")
-complex_frame.grid(row=2, column=0, columnspan=2)
+complex_frame = LabelFrame(root, text="Complex Number Calculator", bg="#b87d63")
+complex_frame.grid(row=2, column=0, columnspan=4)
 complex_calc = ComplexNumUI(complex_frame)
 
 root.mainloop()

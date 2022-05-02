@@ -2,8 +2,17 @@
 import math
 
 
+#This class handles the logic for calculating complex numbers from an expression involving complex numbers
+#To help paint a picture of the design and troubleshooting process, comments of print statements used to debug are
+#left included
 class ComplexExpression:
     def __init__(self, orig_string, answer_format):
+        """
+        Takes the answer format and original string of the expression and stores the answer as a string to the complex
+        equation in self.answer
+        :param orig_string: the original string of the complex expression
+        :param answer_format: either "r" or "po" depending on if the answer should be polar or rectangular
+        """
         self.answer_format = answer_format
         self.orig_string = orig_string
         self.answer = ComplexExpression.process(self.orig_string)
@@ -325,6 +334,10 @@ class ComplexExpression:
         return answer_string
 
     def final_answer(self):
+        """
+        returns the final answer, in the correct format and with a reduced angle if it is polar
+        :return: a string of the final answer
+        """
         if self.answer_format == "po":
             unreduced_polar_coordinates = ComplexExpression.convert_to_polar(self.answer)
             return ComplexExpression.reduce_polar_coordinates(unreduced_polar_coordinates)

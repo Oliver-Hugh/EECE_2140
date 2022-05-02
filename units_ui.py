@@ -2,8 +2,14 @@ from tkinter import *
 import units
 
 
+#This class handles the UI for the unit convertor
 class UnitsUI:
     def __init__(self, master_frame):
+        """
+        By creating objects of this class, the UI for the unit convertor is created and inserted into the specified
+        frame
+        :param master_frame: the label frame where the UI should be inserted in to
+        """
         self.master = master_frame
         # Radio Buttons for unit type
         type_frame = LabelFrame(self.master, text="Conversion Type", bg='#ada168')

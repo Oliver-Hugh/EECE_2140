@@ -1,6 +1,8 @@
 #Oliver Hugh 4/1/2022
 import math
 
+#The functions in this file handle the logic for the unit convertor
+
 # list of equivalent values for [seconds, minutes, hours, days]
 time_constants = [3600, 60, 1, 1 / 24]
 # list of their corresponding unit names
@@ -161,6 +163,11 @@ def prefix_conversion(original_unit, new_unit, original_value):
 
 
 def get_unit_list(type_to_convert):
+    """
+    This function gets the proper list of units that needs to be displayed based on the conversion type
+    :param type_to_convert: Either "Time", "Distance", "Weight/Mass", "Angle", or "Metric Prefixes".
+    :return: None
+    """
     t = type_to_convert
     if t == "Time":
         return ['sec', 'min', 'hours', 'days']

@@ -2,9 +2,15 @@ from tkinter import *
 import gears
 
 
+#This class handles the UI for the gear calculator
 class GearCalculator:
 
     def __init__(self, master_frame):
+        """
+        By creating an object of this class, the UI for the gear calculator is created and inserted in the specified
+        frame
+        :param master_frame: The label frame where UI for this feature should be inserted
+        """
         self.master_frame = master_frame
         #entry for num teeth in gear 1
         gear_1_frame = LabelFrame(self.master_frame, text="Gear 1 # of Teeth:", bg='#c98a00')
@@ -20,8 +26,8 @@ class GearCalculator:
         dp_frame = LabelFrame(self.master_frame, text="Diametral Pitch", bg='#f7e6d0')
         dp_frame.grid(column=0, row=3, pady=20, padx=10)
         #list of standard diametral pitches
-        dp_list = [12, 16, 18, 20, 24, 32, 48]
-        dp = IntVar()
+        dp_list = ["12", "16", "18", "20", "24", "32", "48"]
+        dp = StringVar()
         dp_drop = OptionMenu(dp_frame, dp, *dp_list)
         dp_drop.pack(pady=2)
         dp.set(dp_list[0])
@@ -52,6 +58,11 @@ class GearCalculator:
             self.gear_result.insert(END, str(gear_answer) + " in")
 
     def create_button(self, gear_dp):
+        """
+        This method creates the button that is pressed to calculate the center to center distance of 2 gears
+        :param gear_dp: the gear dp as a string
+        :return: None
+        """
         # button to calculate. This is created after the entry (even though it is above it) because its command
         # function references the gear_result entry
         gear_button = Button(self.master_frame, width=15, text="Calculate Result",

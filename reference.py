@@ -2,8 +2,14 @@
 from tkinter import *
 
 
+#This class handles the main UI for the hardware reference feature
 class ReferenceUI:
     def __init__(self, master_frame):
+        """
+        By creating objects of this class, the buttons for selecting different reference information, as well as the
+        reference information itself will be created and inserted into the specified frame
+        :param master_frame: the LabelFrame where this UI should be added
+        """
         self.master = master_frame
         # picking the size (metric vs standard)
         hardware_sys_frame = LabelFrame(self.master, text="System")
@@ -81,6 +87,7 @@ class ReferenceUI:
         Table(option, table_frame, row_offset=1)
 
 
+#This class is responsible for actually creating the table, and thus handles UI too
 class Table:
 
     metric_screws = [
@@ -159,6 +166,11 @@ class Table:
 
 
 def works_cited(area):
+    """
+    A function to display the works cited in a new window
+    :param area: the frame where the button to open this window will be inserted
+    :return: None
+    """
     worked_cited_window = Toplevel(area)
     worked_cited_window.title("Works Cited")
     cite_1 = """[1]    Bolt Depot. "Metric Nut Sizes", boltdepot.com

@@ -5,10 +5,14 @@ from frac_dec_ui import FracDecUI
 from reference import ReferenceUI
 from complex_num_ui import ComplexNumUI
 
+#This file creates the window where everything will be inserted. It creates a frame for each feature, and creates
+#objects of each respective feature's class, which then inserts the UI into the specified frame. This is the file that
+#must be run to open my project: the Designer's Reference Application. It provides a gear calculator, hardware
+#reference, unit convertor, fraction/decimal convertor, and a complex number calculator.
+
 root = Tk()
 
 root.title("Designer's Reference")
-#root.geometry('1400x400')
 
 #Instruction Frame
 instruction_frame = LabelFrame(master=root, text="Instructions", bg='#c9ad20')

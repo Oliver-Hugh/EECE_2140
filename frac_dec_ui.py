@@ -2,9 +2,14 @@ from tkinter import *
 import frac_dec
 
 
+#This class handles the UI for the fraction/decimal convertor feature
 class FracDecUI:
 
     def __init__(self, master_frame):
+        """
+        By creating objects of this class, the UI is created and inserted into the specified frame
+        :param master_frame: the LabelFrame where the UI for this feature should be added
+        """
         self.master = master_frame
 
         #fraction to decimal

@@ -1,6 +1,7 @@
 #Oliver Hugh 4/4/2022
 
 
+#functions in this file deal with the logic of converting fractions to decimals and vice versa
 def repeating_nums(repeating_seq, static_num):
     """
     Used if repeating numbers are found in a fraction. Returns
@@ -12,7 +13,7 @@ def repeating_nums(repeating_seq, static_num):
     """
     if repeating_seq != 0:
         """
-        #The following code works for most decimals, but after some experimentation, I learned it doesn't work
+        #The following commented code works for most decimals, but after some experimentation, I learned it doesn't work
         #for all repeating decimals. For example .415 repeating. It will run an infinite loop because 1 - .001 will not
         #exactly equal .999. This is left in to show my process for this, which took a long time to figure out. Below 
         this comment is the actual code, which works by converting numbers to strings and back so that we can ensure

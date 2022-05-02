@@ -1,4 +1,5 @@
 #Oliver Hugh 4/4/2022
+#The functions in this file handle the logic behind the gear calculator
 def calculate_center(gear_1_teeth: int, gear_2_teeth: int, dp):
     """
     This function calculates the center to center distance of 2 gears based on

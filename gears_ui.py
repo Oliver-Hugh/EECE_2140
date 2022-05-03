@@ -27,7 +27,7 @@ class GearCalculator:
         dp_frame.grid(column=0, row=3, pady=20, padx=10)
         #list of standard diametral pitches
         dp_list = ["12", "16", "18", "20", "24", "32", "48"]
-        dp = StringVar()
+        dp = IntVar()
         dp_drop = OptionMenu(dp_frame, dp, *dp_list)
         dp_drop.pack(pady=2)
         dp.set(dp_list[0])
